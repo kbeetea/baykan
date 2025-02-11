@@ -1,0 +1,74 @@
+﻿@model List<baykan.Models.Product>
+
+@{
+    ViewBag.Title = "Merchant Dashboard";
+    Layout = "~/Views/Shared/MerchantLayout.cshtml";
+}
+
+<div class="container mt-4">
+    <!-- Dashboard Banner -->
+    <div class="banner p-3 rounded d-flex justify-content-center align-items-center text-center"
+         style="background: url('/Content/images/merch-background.png') no-repeat center center; background-size: cover; height: 450px; color: white;">
+        <div>
+            <h2 class="fw-bold">Empower Your Brand, Elevate Your Sales</h2>
+            <p>Welcome, @Session["Username"]! Manage your inventory and customers efficiently.</p>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <!-- Low Stock Section -->
+        <div class="col-md-5">
+            <div class="card p-3 text-center shadow-sm">
+                <img src="~/Content/images/low-stock.png" alt="Low Stock Alert" class="img-fluid mb-3" style="max-width: 250px; margin: auto;">
+                <h5 class="mb-3">⚠ Low Stock Products</h5>
+
+                @if (ViewBag.LowStockProducts.Count > 0)
+                {
+                    <ul class="list-group">
+                        @foreach (var item in ViewBag.LowStockProducts)
+                        {
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>@item.ProductName</span>
+                                <span class="badge bg-danger">@item.StockQuantity left</span>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="text-muted">All products have sufficient stock.</p>
+                }
+            </div>
+        </div>
+
+        <!-- Product List Section -->
+        <div class="col-md-7">
+            <div class="card p-3 shadow-sm">
+                <h5 class="mb-3">🛍️ Your Products</h5>
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Stock</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Take(5))
+                        {
+                            <tr>
+                                <td>@item.ProductName</td>
+                                <td>@item.StockQuantity</td>
+                                <td>$@item.ProductPrice</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div class="text-end">
+                    <a href="@Url.Action("Index", "Merchant")" class="btn btn-link">Show More →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

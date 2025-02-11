@@ -1,0 +1,59 @@
+﻿
+@model IEnumerable<baykan.Models.Product>
+
+@{
+    ViewBag.Title = "Product List";
+    Layout = "~/Views/Shared/MerchantLayout.cshtml";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-end mb-3">
+        @Html.ActionLink("Add New Product", "Create", "Merchant", null, new { @class = "btn btn-success" })
+    </div>
+
+    <table class="table table-hover table-bordered text-center">
+        <thead style="background-color: #4CAF50; color: white;">
+            <tr>
+                <th>Product Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Category</th>
+                <th>Brand</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.ProductDescription</td>
+                    <td>@item.ProductPrice.ToString("C")</td>
+                    <td>@(item.Category != null ? item.Category.CategoryName : "No Category")</td>
+                    <td>@(item.Brand != null ? item.Brand.BrandName : "No Brand")</td>
+                    <td>
+
+                        @if (item.ProductImage != null && item.ProductImage.Length > 0)
+                        {
+                            string base64String = Convert.ToBase64String(item.ProductImage);
+                            <img src="data:image/png;base64,@base64String" width="80" height="80" class="rounded" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">No Image</span>
+                        }
+                    </td>
+                    <td class="d-flex justify-content-center">
+                        <a href="@Url.Action("Edit", "Merchant", new { id = item.ProductId })" class="btn custom-edit mx-1 w-100">Edit</a>
+                        <a href="@Url.Action("Details", "Merchant", new { id = item.ProductId })" class="btn custom-details mx-1 w-100">Details</a>
+                        <a href="@Url.Action("Delete", "Merchant", new { id = item.ProductId })" class="btn custom-delete mx-1 w-100" onclick="return confirm('Are you sure you want to delete this?');">Delete</a>
+                    </td>
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,73 @@
+﻿@model baykan.Models.Product
+
+@{
+    ViewBag.Title = "Create Product";
+    Layout = "~/Views/Shared/MerchantLayout.cshtml";
+}
+
+<h2 class="mb-4">Create Product</h2>
+
+@using (Html.BeginForm("Create", "Merchant", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="row">
+        <!-- Product Name -->
+        <div class="col-md-6">
+            <label for="ProductName" class="form-label">Product Name</label>
+            <input type="text" class="form-control" id="ProductName" name="ProductName" placeholder="Enter Product Name" required />
+        </div>
+
+        <!-- Product Description -->
+        <div class="col-md-6">
+            <label for="ProductDescription" class="form-label">Product Description</label>
+            <input type="text" class="form-control" id="ProductDescription" name="ProductDescription" placeholder="Enter Description" />
+        </div>
+
+        <!-- Product Price -->
+        <div class="col-md-6">
+            <label for="ProductPrice" class="form-label">Product Price</label>
+            <input type="number" class="form-control" id="ProductPrice" name="ProductPrice" step="0.01" placeholder="Enter Price" required />
+        </div>
+
+        <!-- Existing Category Dropdown -->
+        <div class="col-md-6">
+            <label for="CategoryId" class="form-label">Select Existing Category</label>
+            @Html.DropDownList("CategoryId", ViewBag.Categories as SelectList, "-- Select Category --", new { @class = "form-control", id = "CategoryDropdown" })
+        </div>
+
+        <!-- New Category Input -->
+        <div class="col-md-6">
+            <label for="CategoryName" class="form-label">Or Create New Category</label>
+            <input type="text" class="form-control" id="CategoryName" name="CategoryName" placeholder="Enter new category" />
+        </div>
+
+        <!-- Existing Brand Dropdown -->
+        <div class="col-md-6">
+            <label for="BrandId" class="form-label">Select Existing Brand</label>
+            @Html.DropDownList("BrandId", ViewBag.Brands as SelectList, "-- Select Brand --", new { @class = "form-control", id = "BrandDropdown" })
+        </div>
+
+        <!-- New Brand Input -->
+        <div class="col-md-6">
+            <label for="BrandName" class="form-label">Or Create New Brand</label>
+            <input type="text" class="form-control" id="BrandName" name="BrandName" placeholder="Enter new brand" />
+        </div>
+
+        <div class="col-md-6">
+            <label>Stock Quantity</label>
+            <input type="number" class="form-control" name="StockQuantity" min="0" required />
+        </div>
+
+
+        <!-- Product Image Upload -->
+        <div class="col-md-6">
+            <label for="ImageFile" class="form-label">Product Image</label>
+            <input type="file" class="form-control" id="ImageFile" name="ImageFile" accept="image/*" />
+        </div>
+
+        <!-- Submit Button -->
+        <div class="col-md-12 mt-3">
+            <button type="submit" class="btn btn-success mt-3">Add Product</button>
+            <a class="btn btn-danger mt-3" href="/Merchant/index">Cancel</a>
+        </div>
+    </div>
+}

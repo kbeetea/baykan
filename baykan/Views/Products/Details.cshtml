@@ -1,0 +1,76 @@
+﻿@model baykan.Models.Product
+
+@{
+    ViewBag.Title = "Product Details";
+    Layout = "~/Views/Shared/HomeLayout.cshtml";
+}
+
+<style>
+    .product-container {
+        margin-top: 80px;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+    
+    .btn-buy {
+        background-color: #b8885e;
+        color: white;
+        font-weight: bold;
+    }
+
+        .btn-buy:hover {
+            background-color: #8a6642;
+            color: white;
+        }
+
+</style>
+
+<div class="container product-container">
+    <div class="row g-4">
+        <!-- Left Side: Product Image -->
+        <div class="col-md-5 text-center product-image">
+            @if (Model.ProductImage != null && Model.ProductImage.Length > 0)
+            {
+                string base64String = Convert.ToBase64String(Model.ProductImage);
+                <img src="data:image/png;base64,@base64String" class="img-fluid rounded" />
+            }
+            else
+            {
+                <p>No Image Available</p>
+            }
+        </div>
+
+        <!-- Right Side: Product Details -->
+        <div class="col-md-7">
+            <h2 class="text-dark">@Model.ProductName</h2>
+
+            <!-- Star Rating -->
+            <div class="rating mb-3">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i> <!-- Empty star -->
+                <span class="text-muted">(4/5 based on 120 reviews)</span>
+            </div>
+
+            <p class="text-muted"><strong>Description:</strong> @Model.ProductDescription</p>
+            <h4 class="text-primary"><strong>Price:</strong> $@Model.ProductPrice</h4>
+            <p><strong>Category:</strong> @(Model.Category != null ? Model.Category.CategoryName : "No Category")</p>
+            <p><strong>Brand:</strong> @(Model.Brand != null ? Model.Brand.BrandName : "No Brand")</p>
+
+            <!-- Buy Now & Add to Cart -->
+            <div class="mt-4">
+                <button class="btn btn-buy px-4 py-2 login-trigger" data-url="/Cart/AddToCart?productId=@Model.ProductId">Buy Now</button>
+                <button class="btn btn-outline-dark px-4 py-2 ms-2 login-trigger" data-url="/Cart/AddToCart?productId=@Model.ProductId">Add to Cart</button>
+            </div>
+
+            <a href="@Url.Action("Index", "Products")" class="btn btn-secondary mt-4">Back to Products</a>
+        </div>
+    </div>
+</div>

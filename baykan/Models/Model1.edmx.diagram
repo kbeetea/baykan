@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ac15349517034601931f89c2e6a1aecd" Name="Diagram1">
+        <EntityTypeShape EntityType="ecdataModel.Brand" Width="1.5" PointX="3" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ecdataModel.Cart" Width="1.5" PointX="7.5" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ecdataModel.Category" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="ecdataModel.Customer" Width="1.5" PointX="3" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ecdataModel.Merchant" Width="1.5" PointX="7.75" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="ecdataModel.OrderDetail" Width="1.5" PointX="7.5" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ecdataModel.Order" Width="1.5" PointX="5.25" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="ecdataModel.Product" Width="1.5" PointX="5.25" PointY="3.125" IsExpanded="true" />
+        <AssociationConnector Association="ecdataModel.FK__Brands__Category__76969D2E" ManuallyRouted="false" />
+        <AssociationConnector Association="ecdataModel.FK__Products__BrandI__7D439ABD" ManuallyRouted="false" />
+        <AssociationConnector Association="ecdataModel.FK_Products_Brands" ManuallyRouted="false" />
+        <AssociationConnector Association="ecdataModel.FK__Carts__CustomerI__01142BA1" ManuallyRouted="false" />
+        <AssociationConnector Association="ecdataModel.FK__Carts__ProductId__02084FDA" ManuallyRouted="false" />
+        <AssociationConnector Association="ecdataModel.FK__Products__Catego__7C4F7684" ManuallyRouted="false" />
+        <AssociationConnector Association="ecdataModel.FK__Orders__Customer__05D8E0BE" ManuallyRouted="false" />
+        <AssociationConnector Association="ecdataModel.FK__OrderDeta__Order__09A971A2" ManuallyRouted="false" />
+        <AssociationConnector Association="ecdataModel.FK__OrderDeta__Produ__0A9D95DB" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,61 @@
+﻿@model List<baykan.Models.Product>
+
+@{
+    ViewBag.Title = "All Products";
+    Layout = "~/Views/Shared/HomeLayout.cshtml";
+}
+
+<style>
+
+    #featured > div.row.mx-auto.container > nav > ul > li.page-item.active > a {
+        background-color: black;
+    }
+
+    #featured > div.row.mx-auto.container > nav > ul > li:nth-child(n):hover > a {
+        background-color: coral;
+        color: white;
+    }
+
+    .pagination a {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+</style>
+
+<section id="featured" class="my-5 py-5">
+    <div class="container mt-5 py-5 text-start">
+        <h2 class="font-weight-bold">Our Products</h2>
+        <hr>
+        <p>Explore our exclusive collection of in-demand premium products</p>
+    </div>
+
+    <!-- Centered Layout with Left & Right Margins -->
+    <div class="row mx-auto container">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var product in Model)
+            {
+                @Html.Partial("ProductCard", product) // Reusing Product Card View
+            }
+        }
+        else
+        {
+            <p class="text-center">No products available.</p>
+        }
+    </div>
+
+    <!-- Pagination -->
+    <div class="text-center my-4">
+        @if (ViewBag.CurrentPage > 1)
+        {
+            <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1 })" class="btn btn-secondary">Previous</a>
+        }
+        <span> Page @ViewBag.CurrentPage of @ViewBag.TotalPages </span>
+        @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+        {
+            <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1 })" class="btn btn-secondary">Next</a>
+        }
+    </div>
+</section>

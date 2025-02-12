@@ -132,6 +132,7 @@
     <Content Include="Content\Images\login-bg.png" />
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\merch-bg.png" />
+    <Content Include="Content\Images\order-sucess.jpg" />
     <Content Include="Content\Images\payment.png" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Global.asax" />

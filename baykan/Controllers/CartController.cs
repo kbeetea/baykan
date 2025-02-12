@@ -118,10 +118,6 @@ namespace baykan.Controllers
             return View();
         }
 
-
-
-
-
         [HttpPost]
         public ActionResult Checkout(string fullName, string address, string paymentMethod, bool updateAddress)
         {
@@ -183,12 +179,26 @@ namespace baykan.Controllers
         }
 
 
-
         public ActionResult OrderConfirmation(int id)
         {
-            ViewBag.OrderId = id;
+            var order = db.Orders.Find(id);
+            if (order == null)
+            {
+                return HttpNotFound();
+            }
+
+            var pastOrders = db.Orders
+                .Where(o => o.CustomerId == order.CustomerId && o.OrderId != id)
+                .OrderByDescending(o => o.OrderDate)
+                .ToList();
+
+            ViewBag.OrderId = order.OrderId;
+            ViewBag.OrderDate = order.OrderDate;
+            ViewBag.PastOrders = pastOrders;
+
             return View();
         }
+
 
         public ActionResult OrderHistory()
         {
@@ -202,5 +212,7 @@ namespace baykan.Controllers
 
             return View(orders);
         }
+
+
     }
 }

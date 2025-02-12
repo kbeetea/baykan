@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Web.Helpers;
 using System.Web.Mvc;
 using baykan.Models;
 
@@ -14,7 +13,6 @@ namespace baykan.Controllers
         {
             return View();
         }
-
         // POST: Login Logic (Handles AJAX login)
         [HttpPost]
         public JsonResult Login(string username, string password)
@@ -34,15 +32,15 @@ namespace baykan.Controllers
                 return Json(new { success = true, redirectUrl = Url.Action("MerchantHome", "Merchant") });
             }
 
-            var user = db.Customers.FirstOrDefault(u => u.CustomerEmail == email && u.CustomerPassword == password);
-            if (user != null)
+            // Check Customer Login
+            var customer = db.Customers.FirstOrDefault(c => c.CustomerEmail == username && c.CustomerPassword == password);
+            if (customer != null)
             {
-                Session["UserId"] = user.CustomerId;
-                Session["Username"] = user.CustomerName;
+                Session["UserId"] = customer.CustomerId;
+                Session["Username"] = customer.CustomerName;
                 Session["Role"] = "Customer";
-                return Json(new { success = true });
+                return Json(new { success = true, redirectUrl = Url.Action("Index", "Home") });
             }
-            return Json(new { success = false });
 
             // Invalid login, return error message
             return Json(new { success = false, message = "Invalid username or password!" });

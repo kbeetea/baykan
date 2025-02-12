@@ -1,0 +1,138 @@
+﻿@model List<baykan.Models.Cart>
+
+@{
+    ViewBag.Title = "Your Cart";
+    Layout = "~/Views/Shared/HomeLayout.cshtml";
+}
+
+<style>
+    .cart-container {
+        margin-top: 80px;
+    }
+
+    .cart-table th, .cart-table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .cart-summary {
+        background: #b8885e12;
+        padding: 15px;
+        border-radius: 10px;
+    }
+
+    .btn-update, .btn-checkout {
+        background-color: #b8885e;
+        color: white;
+        font-weight: bold;
+    }
+
+        .btn-update:hover, .btn-checkout:hover {
+            background-color: #8a6642;
+            color: white;
+        }
+
+    .cart-empty {
+        text-align: center;
+        padding: 50px;
+    }
+</style>
+
+<div class="container cart-container">
+    <h2 class="mb-4 text-center">Shopping Cart</h2>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <div class="row">
+            <!-- Left Column: Cart Items -->
+            <div class="col-md-8">
+                <table class="table cart-table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @if (item.Product != null && item.Product.ProductImage != null)
+                                    {
+                                        string base64String = Convert.ToBase64String(item.Product.ProductImage);
+                                        <img src="data:image/png;base64,@base64String" width="80" height="80" />
+                                    }
+                                    else
+                                    {
+                                        <span>No Image</span>
+                                    }
+                                </td>
+                                <td>@item.Product.ProductName</td>
+                                <td>Rs.@item.Product.ProductPrice/-</td>
+                                <td>
+                                    <form action="@Url.Action("UpdateCart", "Cart")" method="post">
+                                        <input type="hidden" name="cartId" value="@item.CartId" />
+                                        <input type="number" name="quantity" value="@item.Quantity" min="1" class="form-control d-inline-block w-50" />
+                                        <button type="submit" class="btn btn-sm btn-update">Update</button>
+                                    </form>
+                                </td>
+                                <td>Rs.@(item.Quantity * item.Product.ProductPrice)</td>
+                                <td>
+                                    <a href="@Url.Action("RemoveFromCart", "Cart", new { cartId = item.CartId })" class="text-danger">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Right Column: Cart Summary -->
+            <div class="col-md-4">
+                <div class="cart-summary p-4">
+                    <h4>Order Summary</h4>
+
+                    <p><strong>Subtotal:</strong> Rs.<span id="subtotal">@Model.Sum(item => item.Quantity * item.Product.ProductPrice)</span></p>
+                    <p><strong>Shipping:</strong> Rs.100</p>
+
+                    <h5>
+                        <strong>Total:</strong>
+                        <span id="finalTotal">Rs.@(Model.Sum(item => item.Quantity * item.Product.ProductPrice) + 100)</span>
+                    </h5>
+
+                    <div class="mt-3">
+                        <a href="@Url.Action("Index", "Products")" class="btn btn-outline-dark btn-sm w-100 mb-2">
+                            <i class="fas fa-arrow-left"></i> Continue Shopping
+                        </a>
+
+                        @if (Session["UserId"] != null && Session["Role"]?.ToString() == "Customer")
+                        {
+                            <a href="@Url.Action("Checkout", "Cart")" class="btn btn-outline-dark btn-sm w-100">
+                                Proceed to Checkout <i class="fas fa-arrow-right"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-outline-dark btn-sm w-100 login-trigger" data-url="@Url.Action("Checkout", "Cart")">
+                                Proceed to Checkout <i class="fas fa-arrow-right"></i>
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="cart-empty text-center">
+            <h4>Your cart is empty!</h4>
+            <a href="@Url.Action("Index", "Products")" class="btn btn-dark">Continue Shopping</a>
+        </div>
+    }
+</div>

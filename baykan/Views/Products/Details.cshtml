@@ -3,36 +3,53 @@
 @{
     ViewBag.Title = "Product Details";
     Layout = "~/Views/Shared/HomeLayout.cshtml";
+    var isAuthenticated = User.Identity.IsAuthenticated;
 }
 
 <style>
     .product-container {
-        margin-top: 80px;
+        margin-top: 100px; /* Prevent overlap with navbar */
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 900px; /* Adjust for wider margins */
+        padding-bottom: 50px;
     }
 
     .product-image img {
         width: 100%;
-        height: 300px;
+        height: 400px;
         object-fit: cover;
         border-radius: 10px;
     }
-    
-    .btn-buy {
+
+    .btn-add-to-cart {
         background-color: #b8885e;
         color: white;
         font-weight: bold;
+        border: none;
     }
 
-        .btn-buy:hover {
+        .btn-add-to-cart:hover {
             background-color: #8a6642;
             color: white;
         }
 
+    /* Featured Products */
+    .featured-products {
+        margin-top: 50px;
+        padding: 30px 0;
+    }
+
+        .featured-products h3 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
 </style>
 
 <div class="container product-container">
     <div class="row g-4">
-        <!-- Left Side: Product Image -->
+        <!-- Left: Product Image -->
         <div class="col-md-5 text-center product-image">
             @if (Model.ProductImage != null && Model.ProductImage.Length > 0)
             {
@@ -45,32 +62,43 @@
             }
         </div>
 
-        <!-- Right Side: Product Details -->
+        <!-- Right: Product Details -->
         <div class="col-md-7">
             <h2 class="text-dark">@Model.ProductName</h2>
-
-            <!-- Star Rating -->
-            <div class="rating mb-3">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="far fa-star"></i> <!-- Empty star -->
-                <span class="text-muted">(4/5 based on 120 reviews)</span>
-            </div>
-
             <p class="text-muted"><strong>Description:</strong> @Model.ProductDescription</p>
             <h4 class="text-primary"><strong>Price:</strong> $@Model.ProductPrice</h4>
             <p><strong>Category:</strong> @(Model.Category != null ? Model.Category.CategoryName : "No Category")</p>
             <p><strong>Brand:</strong> @(Model.Brand != null ? Model.Brand.BrandName : "No Brand")</p>
 
-            <!-- Buy Now & Add to Cart -->
+            <!-- Add to Cart -->
             <div class="mt-4">
-                <button class="btn btn-buy px-4 py-2 login-trigger" data-url="/Cart/AddToCart?productId=@Model.ProductId">Buy Now</button>
-                <button class="btn btn-outline-dark px-4 py-2 ms-2 login-trigger" data-url="/Cart/AddToCart?productId=@Model.ProductId">Add to Cart</button>
+                <button class="btn btn-add-to-cart add-to-cart" data-productid="@Model.ProductId">Add to Cart</button>
+
+            </div>
+
+            <div id="cart-alert" class="alert alert-success" style="display: none; position: fixed; top: 20px; left: 20px; z-index: 9999;">
+                Item added to cart!
             </div>
 
             <a href="@Url.Action("Index", "Products")" class="btn btn-secondary mt-4">Back to Products</a>
+        </div>
+    </div>
+
+    <!-- Featured Products Section -->
+    <div class="featured-products">
+        <h3>You May Also Like</h3>
+        <div class="row">
+            @if (ViewBag.RelatedProducts != null)
+            {
+                foreach (var product in ViewBag.RelatedProducts as List<baykan.Models.Product>)
+                {
+                    @Html.Partial("ProductCard")
+                }
+            }
+            else
+            {
+                <p class="text-center">No related products found.</p>
+            }
         </div>
     </div>
 </div>

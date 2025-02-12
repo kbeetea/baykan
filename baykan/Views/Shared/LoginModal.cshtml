@@ -7,19 +7,116 @@
                 <button type="button" class="close-button" data-bs-dismiss="modal" aria-label="Close">&times;</button>
             </div>
             <div class="modal-body">
-                <form id="loginForm" method="post" action="@Url.Action("Login", "Account")">
-                    <div class="form-group mb-3">
-                        <label class="form-label">Username or Email</label>
-                        <input type="text" name="username" class="form-control form-control-lg" required />
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" id="username" class="form-control" required>
                     </div>
-                    <div class="form-group mb-3">
+
+                    <div class="mb-3">
                         <label class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control form-control-lg" required />
+                        <input type="password" id="password" class="form-control" required>
                     </div>
-                    <p id="loginError" class="text-danger" style="display: none;"></p>
+
+                    <div id="loginError" class="text-danger mb-3" style="display: none;"></div>
+
                     <button type="submit" class="btn btn-dark w-100">Login</button>
                 </form>
+
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $("#loginForm").submit(function (event) {
+            event.preventDefault();
+
+            var username = $("#username").val();
+            var password = $("#password").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/Account/Login",
+                data: { username: username, password: password },
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        updateCartCount(); // 🔥 Update cart count before redirecting
+                        setTimeout(function () {
+                            window.location.href = response.redirectUrl;
+                        }, 500); // Give it a small delay to ensure cart updates before redirecting
+                    } else {
+                        $("#loginError").text(response.message).show();
+                    }
+                },
+                error: function () {
+                    $("#loginError").text("Something went wrong. Please try again.").show();
+                }
+            });
+        });
+
+        // Ensure cart count updates on page load
+        updateCartCount();
+
+        function updateCartCount() {
+            $.ajax({
+                type: "GET",
+                url: "/Cart/GetCartCount",
+                success: function (response) {
+                    if (response.count > 0) {
+                        $("#cart-badge").text(response.count).show();
+                    } else {
+                        $("#cart-badge").hide();
+                    }
+                }
+            });
+        }
+    });
+
+</script>
+
+<style>
+
+    .modal-content {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+        text-align: center;
+    }
+
+    .modal-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-bottom: none;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .modal-title {
+        text-align: center;
+        width: 100%;
+        font-family: 'Playfair Display', serif;
+        font-size: 26px;
+        font-weight: bold;
+        color: #b8885e;
+    }
+
+    .close-button {
+        position: absolute;
+        right: 20px;
+        top: 15px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: #333;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+        .close-button:hover {
+            color: #b8885e;
+        }
+</style>

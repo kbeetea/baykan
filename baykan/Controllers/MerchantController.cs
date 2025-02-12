@@ -37,7 +37,7 @@ namespace baykan.Controllers
 
             int merchantId = Convert.ToInt32(Session["UserId"]);
             var products = db.Products.Where(p => p.MerchantId == merchantId).ToList(); // Fetch only merchant's products
-            var lowStockProducts = products.Where(p => p.StockQuantity < 5).ToList(); // Products with low stock
+            var lowStockProducts = products.Where(p => p.StockQuantity < 10).ToList(); // Products with low stock
 
             ViewBag.LowStockProducts = lowStockProducts;
             return View(products);

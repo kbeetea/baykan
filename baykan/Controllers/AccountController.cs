@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using baykan.Models;
-using db = baykan.Models;
 
 namespace baykan.Controllers
 {
@@ -12,16 +10,20 @@ namespace baykan.Controllers
     {
         private ecdataEntities db = new ecdataEntities();
 
-        // GET: Login Page
         public ActionResult Login()
         {
             return View();
         }
 
-        // POST: Login Logic
+        // POST: Login Logic (Handles AJAX login)
         [HttpPost]
-        public ActionResult Login(string username, string password)
+        public JsonResult Login(string username, string password)
         {
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                return Json(new { success = false, message = "Please enter both username and password!" });
+            }
+
             // Check Merchant Login
             var merchant = db.Merchants.FirstOrDefault(m => m.MerchantUsername == username && m.MerchantPassword == password);
             if (merchant != null)
@@ -32,26 +34,25 @@ namespace baykan.Controllers
                 return Json(new { success = true, redirectUrl = Url.Action("MerchantHome", "Merchant") });
             }
 
-            // Check Customer Login
-            var customer = db.Customers.FirstOrDefault(c => c.CustomerEmail == username && c.CustomerPassword == password);
-            if (customer != null)
+            var user = db.Customers.FirstOrDefault(u => u.CustomerEmail == email && u.CustomerPassword == password);
+            if (user != null)
             {
-                Session["UserId"] = customer.CustomerId;
-                Session["Username"] = customer.CustomerName;
+                Session["UserId"] = user.CustomerId;
+                Session["Username"] = user.CustomerName;
                 Session["Role"] = "Customer";
-                return Json(new { success = true, redirectUrl = Url.Action("Index", "Home") });
+                return Json(new { success = true });
             }
+            return Json(new { success = false });
 
             // Invalid login, return error message
             return Json(new { success = false, message = "Invalid username or password!" });
         }
 
-
         // Logout Functionality
         public ActionResult Logout()
         {
-            Session.Clear(); // Clear session
-            Session.Abandon(); // End session
+            Session.Clear();
+            Session.Abandon();
             return RedirectToAction("Index", "Home");
         }
     }

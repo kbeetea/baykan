@@ -1,0 +1,9 @@
+﻿
+@{
+    ViewBag.Title = "OrderConfirmation";
+    Layout = "~/Views/Shared/HomeLayout.cshtml";
+}
+
+<h2>Thank You for Your Purchase!</h2>
+<p>Your order #@ViewBag.OrderId has been placed successfully.</p>
+<a href="@Url.Action("Index", "Home")" class="btn btn-dark">Continue Shopping</a>

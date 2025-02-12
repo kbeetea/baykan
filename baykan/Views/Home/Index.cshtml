@@ -6,60 +6,40 @@
     Layout = "~/Views/Shared/HomeLayout.cshtml";
 }
 
-<section id="home">
-    <div class="container">
-        <h5>One Stop For Your Premium Looks</h5>
-        <h1>YEAR END <span>SALE</span></h1>
-        <h2>UP TO 30% OFF</h2>
-        <button id="shop-now-button" data-bs-toggle="modal" data-bs-target="#loginModal">SHOP NOW</button>
-    </div>
-</section>
+<html>
+<body>
 
-<!-- Login Modal (Popup) -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="loginModalLabel">Welcome Back</h5>
-                <button type="button" class="close-button" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="loginForm">
-                    <div class="form-group mb-3">
-                        <label class="form-label">Username or Email</label>
-                        <input type="text" name="username" class="form-control form-control-lg" required />
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control form-control-lg" required />
-                    </div>
-                    <p id="loginError" class="text-danger" style="display: none;"></p> <!-- Error Message Here -->
-                    <button type="submit" class="login-btn">Login</button>
-                </form>
-            </div>
+    <section id="home">
+        <div class="container">
+            <h5>One Stop For Your Premium Looks</h5>
+            <h1>YEAR END <span>SALE</span></h1>
+            <h2>UP TO 30% OFF</h2>
+            @*<button id="shop-now-button" data-bs-toggle="modal" data-bs-target="#loginModal">SHOP NOW</button>*@
+            <button id="shop-now-button">SHOP NOW</button>
+
         </div>
-    </div>
-</div>
+    </section>
 
+    <!-- Featured Products Section -->
 
+    <section id="featured" class="my-5 pb-5">
+        <div class="container text-center mt-5 py-5">
+            <h3>Featured Products</h3>
+            <hr class="mx-auto">
+            <p>Explore our exclusive collection of in-demand premium products</p>
+        </div>
 
+        <div class="row mx-auto container">
 
-<!-- Featured Products Section -->
+            @foreach (var product in Model)
+            {
+                @Html.Partial("ProductCard", product)
+            }
+        </div>
+    </section>
 
-<section id="featured" class="my-5 pb-5">
-    <div class="container text-center mt-5 py-5">
-        <h3>Featured Products</h3>
-        <hr class="mx-auto">
-        <p>Explore our exclusive collection of in-demand premium products</p>
-    </div>
-
-    <div class="row mx-auto container">
-        @foreach (var product in Model)
-        {
-            @Html.Partial("ProductCard", product)
-        }
-    </div>
-</section>
+</body>
+</html>
 
 <style>
     /* Hero Section */
@@ -97,112 +77,27 @@
         }
 
         #home span {
-            color: coral;
+            color: #674324;
         }
 
     #shop-now-button {
-        background-color: #b8885e;
+        background-color: #7f5c3dde;
         color: white;
         border: none;
         padding: 12px 25px;
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin-top: 20px;
+        font-size: 1rem;
+        font-weight: lighter;
+        margin-top: 10px;
         cursor: pointer;
         transition: 0.3s;
         text-transform: uppercase;
-        border-radius: 5px;
+        border-radius: 3px;
     }
 
         #shop-now-button:hover {
-            background-color: #a3764c;
-        }
-
-
-    .login-btn {
-        background: linear-gradient(to right, #b8885e, #a3764c);
-        color: white;
-        border: none;
-        padding: 12px 20px;
-        font-size: 1.2rem;
-        font-weight: bold;
-        width: 100%;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-        .login-btn:hover {
-            background: linear-gradient(to right, #a3764c, #8c6140);
-        }
-
-    .modal-content {
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 15px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-        padding: 30px;
-        text-align: center;
-    }
-
-    .modal-header {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        border-bottom: none;
-        font-family: 'Playfair Display', serif;
-    }
-
-    .modal-title {
-        text-align: center;
-        width: 100%;
-        font-family: 'Playfair Display', serif;
-        font-size: 26px;
-        font-weight: bold;
-        color: #b8885e;
-    }
-
-    .close-button {
-        position: absolute;
-        right: 20px;
-        top: 15px;
-        background: none;
-        border: none;
-        font-size: 24px;
-        color: #333;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-        .close-button:hover {
-            color: #b8885e;
+            background-color: #b77c4891;
         }
 </style>
 
 <!-- Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Ensure jQuery is included -->
-
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Ensure jQuery is included -->
-<script>
-$(document).ready(function () {
-    $("#loginForm").submit(function (event) {
-        event.preventDefault(); // Stop the form from reloading the page
-
-        $.ajax({
-            type: "POST",
-            url: "@Url.Action("Login", "Account")",
-            data: $(this).serialize(), // Serialize form data
-            success: function (response) {
-                if (response.success) {
-                    window.location.href = response.redirectUrl; // Redirect on success
-                } else {
-                    $("#loginError").text(response.message).show(); // Show error inside modal
-                }
-            },
-            error: function () {
-                $("#loginError").text("Something went wrong. Please try again.").show();
-            }
-        });
-    });
-});
-</script>

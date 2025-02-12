@@ -45,3 +45,19 @@ $(document).ready(function () {
         window.location.href = redirectUrl; // Redirect to saved URL
     }
 });
+
+
+<script>
+    function addToCart(productId) {
+        window.location.href = "/Cart/AddToCart?productId=" + productId;
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".login-trigger").forEach(item => {
+            item.addEventListener("click", function (event) {
+                event.preventDefault();
+                $("#loginModal").modal("show");
+            });
+        });
+    });
+</script>

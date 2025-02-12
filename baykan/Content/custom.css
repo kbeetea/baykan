@@ -44,7 +44,7 @@ button {
     border: none;
     outline: none;
     color: aliceblue;
-    background-color: #1d1d1d;
+    background-color: #b8885e;
     text-transform: uppercase;
     padding: 13px 30px;
     cursor: pointer;
@@ -189,16 +189,16 @@ button {
 
 /* Custom Button Styling */
 .btn-dark {
-    background-color: #d63384;
+    background-color: #ad6565;
     border: none;
     padding: 12px;
     font-size: 18px;
     transition: 0.3s;
 }
 
-.btn-dark:hover {
-    background-color: #c2185b;
-}
+    .btn-dark:hover {
+        background-color: #a76a6ae4;
+    }
 
 .hero-section {
     background: linear-gradient(to right, #e91e63, #ff9800);
@@ -302,3 +302,4 @@ hr {
     height: 1.5px;
     background-color: rgb(88, 53, 40);
 }
+

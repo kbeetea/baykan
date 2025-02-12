@@ -1,0 +1,186 @@
+﻿@{
+    ViewBag.Title = "Checkout";
+    Layout = "~/Views/Shared/HomeLayout.cshtml";
+}
+
+<style>
+    .checkout-container {
+        margin-top: 50px;
+    }
+
+    .checkout-card {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .btn-place-order {
+        background-color: #b8885e;
+        color: white;
+        font-weight: bold;
+        padding: 8px 0; /* Smaller button */
+    }
+
+        .btn-place-order:hover {
+            background-color: #8a6642;
+            color: white;
+        }
+
+    .btn-back {
+        padding: 6px 0;
+    }
+
+    /* Hide card details initially */
+    #cardDetails {
+        display: none;
+    }
+</style>
+
+<div class="container checkout-container">
+    <h2 class="text-center mb-4">Checkout</h2>
+
+    <div class="row">
+        <!-- Left Column: Personal Information & Payment Details -->
+        <div class="col-md-6">
+            <!-- Personal Information Section -->
+            <div class="checkout-card mb-3">
+                <h4 class="mb-3">Personal Information</h4>
+                <form id="checkoutForm">
+                    <div class="mb-3">
+                        <label for="fullName" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="fullName" value="@ViewBag.CustomerName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Shipping Address</label>
+                        <input type="text" class="form-control" id="address" value="@ViewBag.CustomerAddress" required>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="changeAddressCheck">
+                        <label class="form-check-label" for="changeAddressCheck">
+                            Change Address?
+                        </label>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Payment Details Section -->
+            <div class="checkout-card">
+                <h4 class="mb-3">Payment Details</h4>
+
+                <!-- Payment Method Selection -->
+                <div class="mb-3">
+                    <label class="form-label">Select Payment Method</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="cardPayment" value="card" checked>
+                        <label class="form-check-label" for="cardPayment">Credit/Debit Card</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="upiPayment" value="upi">
+                        <label class="form-check-label" for="upiPayment">UPI</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="codPayment" value="cod">
+                        <label class="form-check-label" for="codPayment">Cash on Delivery (COD)</label>
+                    </div>
+                </div>
+
+                <!-- Card Payment Details (Hidden initially) -->
+                <div id="cardDetails">
+                    <div class="mb-3">
+                        <label for="cardNumber" class="form-label">Card Number</label>
+                        <input type="text" class="form-control" id="cardNumber" placeholder="xxxx-xxxx-xxxx-xxxx" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="expiryDate" class="form-label">Expiry Date</label>
+                            <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="cvv" class="form-label">CVV</label>
+                            <input type="text" class="form-control" id="cvv" placeholder="123" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Image -->
+                <div class="text-center mt-3">
+                    <img src="~/Content/Images/payment.png" alt="Payment Options" class="img-fluid" style="max-width: 150px;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Order Summary -->
+        <div class="col-md-6">
+            <div class="checkout-card">
+                <h4 class="mb-3">Order Summary</h4>
+                <ul class="list-group mb-3">
+                    @foreach (var item in ViewBag.CartItems)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>@item.Product.ProductName (x @item.Quantity)</span>
+                            <strong>Rs.@(item.Product.ProductPrice * item.Quantity)</strong>
+                        </li>
+                    }
+                </ul>
+                <h5 class="text-end">Total: <strong>Rs.@ViewBag.TotalAmount</strong></h5>
+
+                <!-- Place Order Button -->
+                <button type="submit" class="btn btn-dark btn-place-order w-100 mt-3" onclick="placeOrder()">
+                    Place Order
+                </button>
+
+                <!-- Back to Cart Button -->
+                <a href="@Url.Action("Index", "Cart")" class="btn btn-outline-dark w-100 btn-back mt-2">
+                    <i class="fas fa-arrow-left"></i> Back to Cart
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('input[name="paymentMethod"]').change(function () {
+            if ($('#cardPayment').is(':checked')) {
+                $('#cardDetails').slideDown();
+            } else {
+                $('#cardDetails').slideUp();
+            }
+        });
+    });
+
+    function placeOrder() {
+        var isUserLoggedIn = '@Session["UserId"]' !== 'null' && '@Session["UserId"]' !== '';
+
+        if (!isUserLoggedIn) {
+            $('#loginModal').modal('show');
+            return;
+        }
+
+        var newAddress = document.getElementById("address").value;
+        var fullName = document.getElementById("fullName").value;
+        var updateAddress = document.getElementById("changeAddressCheck").checked;
+        var paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+        var orderData = {
+            fullName: fullName,
+            address: newAddress,
+            updateAddress: updateAddress,
+            paymentMethod: paymentMethod
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/Cart/Checkout",
+            data: orderData,
+            success: function (response) {
+                if (response.success) {
+                    alert("Order placed successfully!");
+                    window.location.href = "/Cart/OrderConfirmation?id=" + response.orderId;
+                } else {
+                    alert("Failed to place order.");
+                }
+            }
+        });
+    }
+</script>

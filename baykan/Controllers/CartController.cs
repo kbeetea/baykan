@@ -50,7 +50,6 @@ namespace baykan.Controllers
             return Json(new { success = true });
         }
 
-
         // Update Cart
         [HttpPost]
         public ActionResult UpdateCart(int cartId, int quantity)
@@ -90,7 +89,6 @@ namespace baykan.Controllers
             return Json(new { count = count }, JsonRequestBehavior.AllowGet);
         }
 
-
         [HttpGet]
         public ActionResult Checkout()
         {
@@ -117,6 +115,8 @@ namespace baykan.Controllers
 
             return View();
         }
+
+
 
         [HttpPost]
         public ActionResult Checkout(string fullName, string address, string paymentMethod, bool updateAddress)
@@ -178,7 +178,6 @@ namespace baykan.Controllers
             return Json(new { success = true, orderId = order.OrderId });
         }
 
-
         public ActionResult OrderConfirmation(int id)
         {
             var order = db.Orders.Find(id);
@@ -199,16 +198,18 @@ namespace baykan.Controllers
             return View();
         }
 
-
-        public ActionResult OrderHistory()
+        public ActionResult PastOrders()
         {
             if (Session["UserId"] == null)
             {
-                return RedirectToAction("Login", "Account"); // Redirect to full login page
+                return RedirectToAction("Login", "Account"); // Redirect to login page
             }
 
             int userId = (int)Session["UserId"];
-            var orders = db.Orders.Where(o => o.CustomerId == userId).ToList();
+            var orders = db.Orders
+                .Where(o => o.CustomerId == userId)
+                .Include(o => o.OrderDetails.Select(od => od.Product)) // Load order details & products
+                .ToList();
 
             return View(orders);
         }

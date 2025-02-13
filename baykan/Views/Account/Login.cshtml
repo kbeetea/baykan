@@ -3,45 +3,50 @@
     Layout = "~/Views/Shared/HomeLayout.cshtml";
 }
 
-<div class="container d-flex justify-content-center align-items-center" style="height: 80vh;">
-    <div class="card p-4 shadow" style="width: 350px;">
-        <h4 class="text-center mb-3">Login to Your Account</h4>
-        <form id="loginForm">
+<div class="container d-flex justify-content-center align-items-center" style="height: 85vh;">
+    <div class="card p-4 shadow-lg border-0" style="width: 380px; border-radius: 12px;">
+        <h4 class="text-center mb-4" style="font-family: 'Playfair Display', serif; color: #5a3e2b;">
+            Welcome Back
+        </h4>
+
+        <p class="text-center" style="font-size: 14px; color: #7d5d48;">
+            Sign in to continue your premium shopping experience.
+        </p>
+
+        @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "mt-3" }))
+        {
             <div class="mb-3">
-                <label for="username" class="form-label">Email / Username</label>
-                <input type="text" class="form-control" id="username" required>
+                <label for="username" class="form-label" style="font-weight: 600; color: #5a3e2b;">
+                    Email / Username
+                </label>
+                <input type="text" class="form-control" name="username" required style="border-radius: 8px; border-color: #d8c1ac;">
             </div>
+
             <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" required>
+                <label for="password" class="form-label" style="font-weight: 600; color: #5a3e2b;">
+                    Password
+                </label>
+                <input type="password" class="form-control" name="password" required style="border-radius: 8px; border-color: #d8c1ac;">
             </div>
-            <button type="submit" class="btn btn-dark w-100">Login</button>
-        </form>
-        <p class="mt-3 text-center">
-            Don't have an account? <a href="/Account/Register">Sign Up</a>
+
+            <button type="submit" class="btn w-100"
+                    style="background-color: #7f5c3d; color: white; font-weight: 600; padding: 10px; border-radius: 8px;">
+                Login
+            </button>
+        }
+
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger mt-3 text-center" style="border-radius: 8px;">
+                @ViewBag.ErrorMessage
+            </div>
+        }
+
+        <p class="mt-3 text-center" style="font-size: 14px;">
+            Don't have an account?
+            <a href="@Url.Action("Register", "Account")" style="color: #7f5c3d; font-weight: 600; text-decoration: none;">
+                Sign Up
+            </a>
         </p>
     </div>
 </div>
-
-<script>
-    $(document).ready(function () {
-        $("#loginForm").submit(function (e) {
-            e.preventDefault();
-            var username = $("#username").val();
-            var password = $("#password").val();
-
-            $.ajax({
-                type: "POST",
-                url: "/Account/Login",
-                data: { username: username, password: password },
-                success: function (response) {
-                    if (response.success) {
-                        window.location.href = response.redirectUrl; // Redirect to the appropriate page
-                    } else {
-                        alert(response.message);
-                    }
-                }
-            });
-        });
-    });
-</script>

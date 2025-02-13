@@ -24,6 +24,7 @@ namespace baykan.Models
         public Nullable<int> CustomerId { get; set; }
         public Nullable<System.DateTime> OrderDate { get; set; }
         public Nullable<decimal> TotalAmount { get; set; }
+        public string OrderStatus { get; set; }
     
         public virtual Customer Customer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

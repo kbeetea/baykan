@@ -15,11 +15,12 @@ namespace baykan.Controllers
         }
         // POST: Login Logic (Handles AJAX login)
         [HttpPost]
-        public JsonResult Login(string username, string password)
+        public ActionResult Login(string username, string password)
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                return Json(new { success = false, message = "Please enter both username and password!" });
+                ViewBag.ErrorMessage = "Please enter both username and password!";
+                return View();
             }
 
             // Check Merchant Login
@@ -29,7 +30,7 @@ namespace baykan.Controllers
                 Session["UserId"] = merchant.MerchantId;
                 Session["Username"] = merchant.MerchantUsername;
                 Session["Role"] = "Merchant";
-                return Json(new { success = true, redirectUrl = Url.Action("MerchantHome", "Merchant") });
+                return RedirectToAction("MerchantHome", "Merchant");
             }
 
             // Check Customer Login
@@ -39,11 +40,12 @@ namespace baykan.Controllers
                 Session["UserId"] = customer.CustomerId;
                 Session["Username"] = customer.CustomerName;
                 Session["Role"] = "Customer";
-                return Json(new { success = true, redirectUrl = Url.Action("Index", "Home") });
+                return RedirectToAction("Index", "Home");
             }
 
-            // Invalid login, return error message
-            return Json(new { success = false, message = "Invalid username or password!" });
+            // Invalid login, show error message
+            ViewBag.ErrorMessage = "Invalid username or password!";
+            return View();
         }
 
         // Logout Functionality

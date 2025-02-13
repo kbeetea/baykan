@@ -5,8 +5,8 @@
 
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="card shadow-lg p-5 text-center" style="max-width: 600px; width: 100%;">
-        <!-- Centered, Bigger Success Image -->
-        <img src="~/Content/Images/order-sucess.jpg" alt="Order Success" width="150" class="mb-4 mx-auto d-block">
+        <!-- Centered Success Image -->
+        <img src="~/Content/Images/order-sucess.jpg" alt="Order Success" width="180" class="mb-4 mx-auto d-block">
 
         <h2 class="text-success">Order Placed Successfully!</h2>
         <p class="mb-2">Thank you for your purchase.</p>
@@ -16,9 +16,10 @@
         <!-- Continue Shopping Button -->
         <a href="@Url.Action("Index", "Products")" class="btn btn-dark mt-3">Continue Shopping</a>
 
-        <!-- View Past Orders (Redirect to Order History Page) -->
-        <div class="mt-4">
-            <a href="@Url.Action("OrderHistory", "Cart")" class="btn btn-outline-dark w-100">View Past Orders</a>
+        <!-- View Past Orders Button -->
+        <div class="text-center mt-4">
+            <a href="@Url.Action("PastOrders", "Cart")" class="btn btn-outline-dark">View Past Orders</a>
         </div>
+
     </div>
 </div>

@@ -1,45 +1,38 @@
 ﻿@model List<baykan.Models.Product>
 
-
 @{
     ViewBag.Title = "Home";
-    Layout = "~/Views/Shared/HomeLayout.cshtml";
 }
 
-<html>
-<body>
+<section id="home">
+    <div class="container">
+        <h5>One Stop For Your Premium Looks</h5>
+        <h1>YEAR END <span>SALE</span></h1>
+        <h2>UP TO 30% OFF</h2>
+        <a href="@Url.Action("Index", "Products")" class="btn btn-primary">SHOP NOW</a>
+    </div>
+</section>
 
-    <section id="home">
-        <div class="container">
-            <h5>One Stop For Your Premium Looks</h5>
-            <h1>YEAR END <span>SALE</span></h1>
-            <h2>UP TO 30% OFF</h2>
-            @*<button id="shop-now-button" data-bs-toggle="modal" data-bs-target="#loginModal">SHOP NOW</button>*@
-            <button id="shop-now-button">SHOP NOW</button>
+<!-- Featured Products Section -->
+<section id="featured" class="my-5 pb-5">
+    <div class="container text-center mt-5 py-5">
+        <h3>Featured Products</h3>
+        <hr class="mx-auto">
+        <p>Explore our exclusive collection of in-demand premium products</p>
+    </div>
 
-        </div>
-    </section>
+    <div class="row mx-auto container">
+        @foreach (var product in Model)
+        {
+            @Html.Partial("ProductCard", product)
+        }
+    </div>
+</section>
 
-    <!-- Featured Products Section -->
-
-    <section id="featured" class="my-5 pb-5">
-        <div class="container text-center mt-5 py-5">
-            <h3>Featured Products</h3>
-            <hr class="mx-auto">
-            <p>Explore our exclusive collection of in-demand premium products</p>
-        </div>
-
-        <div class="row mx-auto container">
-
-            @foreach (var product in Model)
-            {
-                @Html.Partial("ProductCard", product)
-            }
-        </div>
-    </section>
-
-</body>
-</html>
+<!-- Placeholder for Categories Button (to be added later) -->
+<section id="categories" class="text-center my-5">
+    <button id="categories-button" class="btn btn-dark">Explore Categories</button>
+</section>
 
 <style>
     /* Hero Section */
@@ -97,7 +90,32 @@
         #shop-now-button:hover {
             background-color: #b77c4891;
         }
+
+    /* Categories Button */
+    #categories-button {
+        background-color: #b8885e;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        font-size: 1rem;
+        font-weight: bold;
+        margin-top: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+        border-radius: 5px;
+    }
+
+        #categories-button:hover {
+            background-color: #8a5e38;
+        }
 </style>
 
-<!-- Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Ensure jQuery is included -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#categories-button").click(function () {
+            window.location.href = "/Categories/Index"; // Redirect to Categories Page
+        });
+    });
+</script>

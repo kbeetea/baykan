@@ -1,75 +1,32 @@
 ﻿@model baykan.Models.Product
 
-<html>
-<body>
-    <div class="product text-center col-lg-3 col-md-4 col-12">
-        <!-- Clickable Image for Product Details -->
-        <a href="@Url.Action("Details", "Products", new { id = Model.ProductId })">
-            @if (Model.ProductImage != null && Model.ProductImage.Length > 0)
-            {
-                string base64String = Convert.ToBase64String(Model.ProductImage);
-                <img class="img-fluid mb-3" src="data:image/png;base64,@base64String" alt="@Model.ProductName" />
-            }
-            else
-            {
-                <img class="img-fluid mb-3" src="~/Content/Images/no-image.png" alt="No Image Available" />
-            }
-        </a>
+@{
+    bool isAuthenticated = Session["UserId"] != null;
+}
 
-        <!-- Star Rating -->
-        <div class="star">
-            @for (int i = 0; i < 5; i++)
-            {
-                if (i < Model.AverageRating) // Assuming 'AverageRating' is an integer (0-5)
-                {
-                    <i class="fas fa-star"></i>
-                }
-                else
-                {
-                    <i class="far fa-star"></i> <!-- Empty Star -->
-                }
-            }
-        </div>
+<div class="product text-center col-lg-3 col-md-4 col-12">
+    <!-- Clickable Image for Product Details -->
+    <a href="@Url.Action("Details", "Products", new { id = Model.ProductId })">
+        @if (Model.ProductImage != null && Model.ProductImage.Length > 0)
+        {
+            string base64String = Convert.ToBase64String(Model.ProductImage);
+            <img class="img-fluid mb-3" src="data:image/png;base64,@base64String" alt="@Model.ProductName" />
+        }
+        else
+        {
+            <img class="img-fluid mb-3" src="~/Content/Images/no-image.png" alt="No Image Available" />
+        }
+    </a>
 
-        <!-- Clickable Product Name -->
-        <a href="@Url.Action("Details", "Products", new { id = Model.ProductId })" class="text-dark text-decoration-none">
-            <h5 class="p-name">@Model.ProductName</h5>
-        </a>
+    <h5 class="p-name">@Model.ProductName</h5>
+    <h4 class="p-price">@Model.ProductPrice.ToString("N0")/-</h4>
 
-        <h4 class="p-price">@Model.ProductPrice.ToString("N0")/-</h4>
-
-        <!-- Buy Now Button -->
-        @if (Session["UserId"] == null)
-
-    </div>
-
-    <script>
-        $(document).ready(function () {
-            $(".add-to-cart").click(function () {
-                var productId = $(this).data("productid");
-
-                $.ajax({
-                    type: "POST",
-                    url: "/Cart/AddToCart",
-                    data: { productId: productId },
-                    success: function (response) {
-                        if (response.success) {
-                            showMiniCartPopup();
-                        } else {
-                            alert(response.message);
-                        }
-                    },
-                    error: function () {
-                        alert("Something went wrong.");
-                    }
-                });
-            });
-
-            function showMiniCartPopup() {
-                var miniCart = $("#miniCart");
-                miniCart.fadeIn().delay(2000).fadeOut();
-            }
-        });
-    </script>
-</body>
-</html>
+    @if (!isAuthenticated)
+    {
+        <a href="@Url.Action("Login", "Account")" class="buy-btn">Add to Cart</a>
+    }
+    else
+    {
+        <button class="buy-btn add-to-cart" data-productid="@Model.ProductId">Add to Cart</button>
+    }
+</div>

@@ -1,0 +1,17 @@
+﻿@{
+    if (Session["UserId"] != null)
+    {
+        if (Session["Role"] != null && Session["Role"].ToString() == "Merchant")
+        {
+            Layout = "~/Views/Shared/MerchantLayout.cshtml";
+        }
+        else
+        {
+            Layout = "~/Views/Shared/CustomerLayout.cshtml";
+        }
+    }
+    else
+    {
+        Layout = "~/Views/Shared/HomeLayout.cshtml"; // Guest layout
+    }
+}

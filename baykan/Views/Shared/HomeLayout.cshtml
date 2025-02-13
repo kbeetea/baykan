@@ -76,9 +76,11 @@
                         <a class="nav-link" href="@Url.Action("Contact", "Home")">Contact Us</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Index", "Cart")">Cart
+                        <a class="nav-link" href="@Url.Action("Index", "Cart")">
+                            🛒 Cart
                             <span id="cart-badge" class="badge bg-danger" style="display:none;">0</span>
                         </a>
+
                     </li>
                     <li class="nav-item dropdown">
                         @if (Session["UserId"] != null)
@@ -96,12 +98,14 @@
                         }
                         else
                         {
-                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#loginModal">
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Login", "Account")">
                                 <i class="fas fa-user"></i> Login
                             </a>
-                        }
-                    </li>
-                </ul>
+                        </li>
+
+                    }
+                    </ul>
             </div>
         </div>
     </nav>
@@ -114,9 +118,6 @@
     <!-- Footer -->
     @Html.Partial("Footer")
 
-    <!-- Login Modal -->
-    @Html.Partial("LoginModal")
-
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -124,28 +125,12 @@
     $(document).ready(function () {
         var isAuthenticated = '@(Session["UserId"] != null ? "true" : "false")';
 
-        // Function to show login modal
-        function showLoginModal() {
-            $("#loginModal").modal("show");
-        }
-
-        // SHOP NOW BUTTON - Trigger Login Modal if Not Authenticated
-        $("#shop-now-button").click(function (e) {
-            if (isAuthenticated === "false") {
-                e.preventDefault();
-                showLoginModal();
-            } else {
-                window.location.href = "/Products/Index";  // Redirect to Shop Page if logged in
-            }
-        });
-
         // BUY NOW & ADD TO CART - Check Login Before Adding to Cart
         $(".add-to-cart").click(function (e) {
             var productId = $(this).data("productid");
 
             if (isAuthenticated === "false") {
                 e.preventDefault();
-                showLoginModal();
                 return;
             }
 
@@ -157,8 +142,7 @@
                 success: function (response) {
                     if (response.success) {
                         updateCartCount();
-                        updateMiniCart();
-                        $("#miniCartDropdown").fadeIn().delay(2000).fadeOut();
+                        
                     } else {
                         alert(response.message);
                     }
@@ -183,8 +167,6 @@
             });
         }
     });
-
-
     </script>
 
 

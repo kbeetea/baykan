@@ -39,7 +39,7 @@
         <h4 class="p-price">@Model.ProductPrice.ToString("N0")/-</h4>
 
         <!-- Buy Now Button -->
-       <button class="buy-btn add-to-cart" data-productid="@Model.ProductId">Buy Now</button>
+        @if (Session["UserId"] == null)
 
     </div>
 

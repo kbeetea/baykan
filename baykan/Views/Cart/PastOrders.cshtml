@@ -76,7 +76,7 @@
                         Placed On: <span class="text-dark">@(order.OrderDate?.ToString("dd MMM yyyy") ?? "N/A")</span>
                     </p>
 
-                    <p class="fw-bold mb-1">Total Amount: <span class="text-dark">Rs.@order.TotalAmount</span></p>
+                    <p class="fw-bold mb-1">Total Amount: <span class="text-dark">@order.TotalAmount</span></p>
 
                     <ul class="list-group mt-2">
                         @foreach (var item in order.OrderDetails)
@@ -84,7 +84,7 @@
                             <li class="list-group-item d-flex justify-content-between align-items-center border-0"
                                 style="background: #F8F9FA; border-radius: 8px; margin-bottom: 5px;">
                                 <span class="fw-medium">@item.Product.ProductName (x @item.Quantity)</span>
-                                <strong class="text-dark">Rs.@(item.Product.ProductPrice * item.Quantity)</strong>
+                                <strong class="text-dark">@(item.Product.ProductPrice * item.Quantity)</strong>
                             </li>
                         }
                     </ul>

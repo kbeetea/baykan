@@ -9,6 +9,72 @@ namespace baykan.Controllers
     {
         private ecdataEntities db = new ecdataEntities();
 
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Register(string UserType, string Name, string Email, string Password, string Address)
+        {
+            if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Password))
+            {
+                ViewBag.ErrorMessage = "All fields are required!";
+                return View();
+            }
+
+            if (UserType == "Customer")
+            {
+                // Check if email is already registered
+                var existingCustomer = db.Customers.FirstOrDefault(c => c.CustomerEmail == Email);
+                if (existingCustomer != null)
+                {
+                    ViewBag.ErrorMessage = "Email is already registered!";
+                    return View();
+                }
+
+                var newCustomer = new Customer
+                {
+                    CustomerName = Name,
+                    CustomerEmail = Email,
+                    CustomerPassword = Password,
+                    CustomerAddress = Address
+                };
+
+                db.Customers.Add(newCustomer);
+            }
+            else if (UserType == "Merchant")
+            {
+                // Check if username is already taken
+                var existingMerchant = db.Merchants.FirstOrDefault(m => m.MerchantUsername == Name);
+                if (existingMerchant != null)
+                {
+                    ViewBag.ErrorMessage = "Username is already taken!";
+                    return View();
+                }
+
+                var newMerchant = new Merchant
+                {
+                    MerchantUsername = Name,
+                    MerchantPassword = Password
+                };
+
+                db.Merchants.Add(newMerchant);
+            }
+
+            try
+            {
+                db.SaveChanges();
+                return RedirectToAction("Login");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "Error saving to the database: " + ex.Message;
+                return View();
+            }
+        }
+
+
         public ActionResult Login()
         {
             return View();
@@ -47,7 +113,7 @@ namespace baykan.Controllers
             ViewBag.ErrorMessage = "Invalid username or password!";
             return View();
         }
-
+        
         // Logout Functionality
         public ActionResult Logout()
         {
@@ -55,5 +121,7 @@ namespace baykan.Controllers
             Session.Abandon();
             return RedirectToAction("Index", "Home");
         }
+
+
     }
 }

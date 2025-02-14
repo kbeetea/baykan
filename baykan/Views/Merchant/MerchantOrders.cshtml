@@ -1,0 +1,196 @@
+﻿@model List<baykan.Models.Order>
+
+@{
+    Layout = "~/Views/Shared/MerchantLayout.cshtml";
+    ViewBag.Title = "Manage Orders";
+}
+
+<div class="orders-container">
+    <h2 class="page-title">Customer Orders</h2>
+
+    <table class="table custom-table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer Name</th>
+                <th>Order Date</th>
+                <th>Total Amount</th>
+                <th>Order Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.OrderId</td>
+                    <td>@(order.Customer?.CustomerName ?? "Guest")</td>
+                    <td>@(order.OrderDate?.ToString("D"))</td>
+                    <td>$ @order.TotalAmount</td>
+                    <td>
+                        <select class="form-select order-status" data-orderid="@order.OrderId">
+                            <option value="Pending" class="pending" @(order.OrderStatus == "Pending" ? "selected" : "")>Pending</option>
+                            <option value="Processing" class="processing" @(order.OrderStatus == "Processing" ? "selected" : "")>Processing</option>
+                            <option value="Shipped" class="shipped" @(order.OrderStatus == "Shipped" ? "selected" : "")>Shipped</option>
+                            <option value="Delivered" class="delivered" @(order.OrderStatus == "Delivered" ? "selected" : "")>Delivered</option>
+                            <option value="Cancelled" class="cancelled" @(order.OrderStatus == "Cancelled" ? "selected" : "")>Cancelled</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="btn update-status" data-orderid="@order.OrderId">Update</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- jQuery (Ensure jQuery is included) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(".order-status").each(function () {
+            updateStatusColor($(this));
+        });
+
+        $(".order-status").change(function () {
+            updateStatusColor($(this));
+        });
+
+        $(".update-status").click(function () {
+            var orderId = $(this).data("orderid");
+            var newStatus = $(this).closest("tr").find(".order-status").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/Merchant/UpdateOrderStatus",
+                data: { orderId: orderId, newStatus: newStatus },
+                success: function (response) {
+                    if (response.success) {
+                        alert("Order status updated successfully!");
+                    } else {
+                        alert("Error updating status: " + response.message);
+                    }
+                },
+                error: function () {
+                    alert("Something went wrong.");
+                }
+            });
+        });
+
+        function updateStatusColor(selectElement) {
+            var status = selectElement.val();
+            selectElement.removeClass("pending processing shipped delivered cancelled");
+
+            if (status === "Pending") selectElement.addClass("pending");
+            if (status === "Processing") selectElement.addClass("processing");
+            if (status === "Shipped") selectElement.addClass("shipped");
+            if (status === "Delivered") selectElement.addClass("delivered");
+            if (status === "Cancelled") selectElement.addClass("cancelled");
+        }
+    });
+</script>
+
+<style>
+    /* --- Orders Page Container --- */
+    .orders-container {
+        width: 85%;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    /* --- Title Styling --- */
+    .page-title {
+        text-align: center;
+        font-size: 22px;
+        font-weight: bold;
+        color: #7a5c3a;
+        margin-bottom: 15px;
+    }
+
+    /* --- Custom Table Styling --- */
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+        /* Header */
+        .custom-table thead {
+            background-color: #d6b58c;
+            color: white;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        /* Table Rows */
+        .custom-table tbody tr {
+            border-bottom: 1px solid #ddd;
+            height: 50px;
+        }
+
+            .custom-table tbody tr:hover {
+                background-color: #f3e8de;
+            }
+
+        /* Table Cells */
+        .custom-table th, .custom-table td {
+            padding: 12px;
+            text-align: center;
+        }
+
+    /* --- Order Status Dropdown Styling --- */
+    .order-status {
+        padding: 6px;
+        border-radius: 5px;
+        font-weight: bold;
+        text-transform: capitalize;
+        border: 1px solid #ccc;
+        text-align: center;
+        width: 120px;
+        cursor: pointer;
+    }
+
+    /* --- Status Colors (Text is the same, but background changes) --- */
+    .pending {
+        color: #856404; /* Dark Yellow */
+        background-color: #fff4d4; /* Light Pastel Yellow */
+    }
+
+    .processing {
+        color: #0c5460; /* Dark Blue */
+        background-color: #d1ecf1; /* Light Pastel Blue */
+    }
+
+    .shipped {
+        color: #155724; /* Dark Green */
+        background-color: #d4edda; /* Light Pastel Green */
+    }
+
+    .delivered {
+        color: #155724; /* Dark Green */
+        background-color: #c3e6cb; /* Softer Light Green */
+    }
+
+    .cancelled {
+        color: #721c24; /* Dark Red */
+        background-color: #f8d7da; /* Light Pastel Red */
+    }
+    /* --- Update Button --- */
+    .update-status {
+        background-color: #a77d4d;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: all 0.3s ease-in-out;
+    }
+
+        .update-status:hover {
+            background-color: #8c6843;
+        }
+</style>

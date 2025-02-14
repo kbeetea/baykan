@@ -9,7 +9,7 @@
         <h5>One Stop For Your Premium Looks</h5>
         <h1>YEAR END <span>SALE</span></h1>
         <h2>UP TO 30% OFF</h2>
-        <a href="@Url.Action("Index", "Products")" class="btn btn-primary">SHOP NOW</a>
+        <a href="@Url.Action("Index", "Products")" id="shop-now-button">SHOP NOW</a>
     </div>
 </section>
 
@@ -27,11 +27,6 @@
             @Html.Partial("ProductCard", product)
         }
     </div>
-</section>
-
-<!-- Placeholder for Categories Button (to be added later) -->
-<section id="categories" class="text-center my-5">
-    <button id="categories-button" class="btn btn-dark">Explore Categories</button>
 </section>
 
 <style>

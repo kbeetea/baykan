@@ -189,7 +189,7 @@ button {
 
 /* Custom Button Styling */
 .btn-dark {
-    background-color: #ad6565;
+    background-color: #7f5c3dde;
     border: none;
     padding: 12px;
     font-size: 18px;
@@ -267,7 +267,7 @@ footer {
         width: 250px; /* Fixed width */
         height: 250px; /* Fixed height */
         object-fit: cover; /* Ensures image fills space without stretching */
-        border-radius: 5px; /* Optional: Adds rounded corners for a premium look */
+        border-radius: 3px; /* Optional: Adds rounded corners for a premium look */
         transition: 0.3s all;
     }
 

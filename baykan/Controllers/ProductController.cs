@@ -8,20 +8,29 @@ public class ProductsController : Controller
 {
     private ecdataEntities db = new ecdataEntities();
 
-    public ActionResult Index(int page = 1, int pageSize = 8)
+    public ActionResult Index(int? categoryId, int page = 1, int pageSize = 8)
     {
-        var products = db.Products.OrderBy(p => p.ProductId).ToList(); // Fetch products
+        var products = db.Products.AsQueryable();
 
-        if (products == null || !products.Any())
+        // If a category is selected, filter products
+        if (categoryId.HasValue)
         {
-            products = new List<Product>(); // Ensure the list is never null
+            products = products.Where(p => p.CategoryId == categoryId.Value);
         }
 
-        int totalProducts = products.Count;
-        var pagedProducts = products.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        int totalProducts = products.Count();
+        var pagedProducts = products
+                            .OrderBy(p => p.ProductId)
+                            .Skip((page - 1) * pageSize)
+                            .Take(pageSize)
+                            .ToList();
 
         ViewBag.CurrentPage = page;
         ViewBag.TotalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
+        ViewBag.SelectedCategory = categoryId;
+
+        // Fetch categories for the category menu
+        ViewBag.Categories = db.Categories.ToList();
 
         return View(pagedProducts);
     }
@@ -35,8 +44,4 @@ public class ProductsController : Controller
         }
         return View(product);
     }
-
-
-
-
 }

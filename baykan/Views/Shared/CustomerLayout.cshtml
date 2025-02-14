@@ -71,10 +71,11 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="@Url.Action("Index", "Cart")">
-                            Cart
+                            🛒 Cart
                             <span id="cart-badge" class="badge bg-danger" style="display:none;">0</span>
                         </a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="@Url.Action("PastOrders", "Cart")">Past Orders</a>
                     </li>
@@ -103,68 +104,68 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-$(document).ready(function () {
-    var isAuthenticated = '@(Session["UserId"] != null ? "true" : "false")';
-/*
-    // Function to show login modal
-    function showLoginModal() {
-        $("#loginModal").modal("show");
-    }
-
-    // SHOP NOW BUTTON - Trigger Login Modal if Not Authenticated
-    $("#shop-now-button").click(function (e) {
-        if (isAuthenticated === "false") {
-            e.preventDefault();
-            showLoginModal();
-        } else {
-            window.location.href = "/Products/Index";  // Redirect to Shop Page if logged in
-        }
-    });*/
-
-    // BUY NOW & ADD TO CART - Check Login Before Adding to Cart
-    $(".add-to-cart").click(function (e) {
-        var productId = $(this).data("productid");
-
-        if (isAuthenticated === "false") {
-            e.preventDefault();
-            showLoginModal();
-            return;
+    $(document).ready(function () {
+        var isAuthenticated = '@(Session["UserId"] != null ? "true" : "false")';
+    /*
+        // Function to show login modal
+        function showLoginModal() {
+            $("#loginModal").modal("show");
         }
 
-        // Proceed with adding to cart if logged in
-        $.ajax({
-            type: "POST",
-            url: "/Cart/AddToCart",
-            data: { productId: productId },
-            success: function (response) {
-                if (response.success) {
-                    updateCartCount();
-                    updateMiniCart();
-                    $("#miniCartDropdown").fadeIn().delay(2000).fadeOut();
-                } else {
-                    alert(response.message);
-                }
-            },
-            error: function () {
-                alert("Something went wrong. Please try again.");
+        // SHOP NOW BUTTON - Trigger Login Modal if Not Authenticated
+        $("#shop-now-button").click(function (e) {
+            if (isAuthenticated === "false") {
+                e.preventDefault();
+                showLoginModal();
+            } else {
+                window.location.href = "/Products/Index";  // Redirect to Shop Page if logged in
             }
+        });*/
+
+        // BUY NOW & ADD TO CART - Check Login Before Adding to Cart
+        $(".add-to-cart").click(function (e) {
+            var productId = $(this).data("productid");
+
+            if (isAuthenticated === "false") {
+                e.preventDefault();
+                showLoginModal();
+                return;
+            }
+
+            // Proceed with adding to cart if logged in
+            $.ajax({
+                type: "POST",
+                url: "/Cart/AddToCart",
+                data: { productId: productId },
+                success: function (response) {
+                    if (response.success) {
+                        updateCartCount();
+                        updateMiniCart();
+                        $("#miniCartDropdown").fadeIn().delay(2000).fadeOut();
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert("Something went wrong. Please try again.");
+                }
+            });
         });
+
+        function updateCartCount() {
+            $.ajax({
+                type: "GET",
+                url: "/Cart/GetCartCount",
+                success: function (response) {
+                    if (response.count > 0) {
+                        $("#cart-badge").text(response.count).show();
+                    } else {
+                        $("#cart-badge").hide();
+                    }
+                }
+            });
+        }
     });
-
-    function updateCartCount() {
-        $.ajax({
-            type: "GET",
-            url: "/Cart/GetCartCount",
-            success: function (response) {
-                if (response.count > 0) {
-                    $("#cart-badge").text(response.count).show();
-                } else {
-                    $("#cart-badge").hide();
-                }
-            }
-        });
-    }
-});
     </script>
 
 

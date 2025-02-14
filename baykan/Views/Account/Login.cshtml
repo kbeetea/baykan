@@ -4,12 +4,12 @@
 }
 
 <div class="container d-flex justify-content-center align-items-center" style="height: 85vh;">
-    <div class="card p-4 shadow-lg border-0" style="width: 380px; border-radius: 12px;">
-        <h4 class="text-center mb-4" style="font-family: 'Playfair Display', serif; color: #5a3e2b;">
+    <div class="card p-4 shadow-lg border-0" style="width: 400px; border-radius: 12px;">
+        <h4 class="text-center mb-3" color: #5a3e2b;">
             Welcome Back
         </h4>
 
-        <p class="text-center" style="font-size: 14px; color: #7d5d48;">
+        <p class="text-center text-muted" style="font-size: 14px;">
             Sign in to continue your premium shopping experience.
         </p>
 
@@ -19,34 +19,74 @@
                 <label for="username" class="form-label" style="font-weight: 600; color: #5a3e2b;">
                     Email / Username
                 </label>
-                <input type="text" class="form-control" name="username" required style="border-radius: 8px; border-color: #d8c1ac;">
+                <input type="text" class="form-control custom-input" name="username" required>
             </div>
 
             <div class="mb-3">
                 <label for="password" class="form-label" style="font-weight: 600; color: #5a3e2b;">
                     Password
                 </label>
-                <input type="password" class="form-control" name="password" required style="border-radius: 8px; border-color: #d8c1ac;">
+                <input type="password" class="form-control custom-input" name="password" required>
             </div>
 
-            <button type="submit" class="btn w-100"
-                    style="background-color: #7f5c3d; color: white; font-weight: 600; padding: 10px; border-radius: 8px;">
-                Login
-            </button>
+            <button type="submit" class="btn custom-btn w-100">Login</button>
         }
 
         @if (ViewBag.ErrorMessage != null)
         {
-            <div class="alert alert-danger mt-3 text-center" style="border-radius: 8px;">
+            <div class="alert alert-danger mt-3 text-center custom-alert">
                 @ViewBag.ErrorMessage
             </div>
         }
 
         <p class="mt-3 text-center" style="font-size: 14px;">
             Don't have an account?
-            <a href="@Url.Action("Register", "Account")" style="color: #7f5c3d; font-weight: 600; text-decoration: none;">
-                Sign Up
-            </a>
+            <a href="@Url.Action("Register", "Account")" class="custom-link">Sign Up</a>
         </p>
     </div>
 </div>
+
+<style>
+    .custom-input {
+        border-radius: 8px;
+        border: 1px solid #d8c1ac;
+        padding: 10px;
+        transition: all 0.3s ease;
+    }
+
+        .custom-input:focus {
+            border-color: #b8885e;
+            box-shadow: 0 0 5px rgba(184, 136, 94, 0.3);
+        }
+
+    .custom-btn {
+        background-color: #b8885e;
+        color: white;
+        font-weight: bold;
+        padding: 10px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .custom-btn:hover {
+            background-color: #8a6642;
+            color: white;
+        }
+
+    .custom-link {
+        color: #b8885e;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+        .custom-link:hover {
+            color: #8a6642;
+        }
+
+    .custom-alert {
+        border-radius: 8px;
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+</style>

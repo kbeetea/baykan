@@ -1,0 +1,27 @@
+﻿@model List<baykan.Models.Product>
+
+@{
+    ViewBag.Title = ViewBag.CategoryName; // Show the category name in the title
+}
+
+<section id="featured" class="my-5 py-5">
+    <div class="container mt-5 py-5 text-start">
+        <h2 class="font-weight-bold">@ViewBag.CategoryName</h2>
+        <hr>
+        <p>Discover exclusive products in @ViewBag.CategoryName</p>
+    </div>
+
+    <div class="row mx-auto container">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var product in Model)
+            {
+                @Html.Partial("_ProductListing", product) // Use shared partial view
+            }
+        }
+        else
+        {
+            <p class="text-center">No products found in this category.</p>
+        }
+    </div>
+</section>

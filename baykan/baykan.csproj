@@ -120,6 +120,8 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\custom.css" />
+    <Content Include="Content\Images\cart-empty.gif" />
+    <Content Include="Content\Images\cry.gif" />
     <Content Include="Content\Images\home-background.png" />
     <Content Include="Content\Images\low-stock.png" />
     <Content Include="Content\Images\merch-background.png" />
@@ -359,6 +361,9 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Cart\PastOrders.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Merchant\MerchantOrders.cshtml" />
+    <Content Include="Views\Home\Category.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

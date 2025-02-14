@@ -152,7 +152,8 @@ namespace baykan.Controllers
             {
                 CustomerId = userId,
                 OrderDate = DateTime.Now,
-                TotalAmount = totalAmount
+                TotalAmount = totalAmount,
+                OrderStatus = "Pending"
             };
 
             db.Orders.Add(order);

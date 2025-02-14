@@ -51,7 +51,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="@Url.Action("MerchantHome", "Merchant")">Merchant Panel</a>
+            <a class="navbar-brand" href="@Url.Action("MerchantHome", "Merchant")">@Session["Username"]'s Merchant Panel</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -67,7 +67,7 @@
                         <a class="nav-link" href="@Url.Action("Create", "Merchant")">Add Product</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Orders", "Merchant")">Orders</a>
+                        <a class="nav-link" href="@Url.Action("MerchantOrders", "Merchant")">Orders</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-danger" href="@Url.Action("Logout", "Account")">Logout</a>

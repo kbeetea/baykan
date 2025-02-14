@@ -241,5 +241,42 @@ namespace baykan.Controllers
             return View(product);
         }
 
+        public ActionResult MerchantOrders()
+        {
+            if (Session["UserId"] == null || Session["Role"]?.ToString() != "Merchant")
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            int merchantId = Convert.ToInt32(Session["UserId"]);
+
+            // Fetch only orders that contain products belonging to the logged-in merchant
+            var orders = db.Orders
+                .Where(o => o.OrderDetails.Any(od => od.Product.MerchantId == merchantId))
+                .Include("Customer")
+                .ToList();
+
+            return View(orders);
+        }
+
+
+        [HttpPost]
+        public JsonResult UpdateOrderStatus(int orderId, string newStatus)
+        {
+            var order = db.Orders.FirstOrDefault(o => o.OrderId == orderId);
+            if (order == null)
+            {
+                return Json(new { success = false, message = "Order not found!" });
+            }
+
+            // Update order status
+            order.OrderStatus = newStatus;
+            db.SaveChanges();
+
+            return Json(new { success = true });
+        }
+
+
+
     }
 }
